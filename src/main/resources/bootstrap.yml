@@ -3,12 +3,18 @@ spring:
     name: turbine
   cloud:
     config:
-      uri: http://localhost:8888
+      discovery:
+        enabled: true
+        serviceId: config
       fail-fast: true
       password: test
       username: user
-server:
-  port: 8989
 
-management:
-  port: 8990
+eureka:
+  instance:
+    leaseRenewalIntervalInSeconds: 10
+    instanceId: ${spring.application.name}:${vcap.application.instance_id:${spring.application.instance_id:${random.value}}}
+  client:
+    registryFetchIntervalSeconds: 5
+    serviceUrl:
+      defaultZone: http://localhost:8761/eureka/
